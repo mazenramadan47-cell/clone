@@ -1,9 +1,1000 @@
-const birthday=new Date("2026-08-31T00:00:00+03:00"), screens=["countdown","welcome","letter","memories","videoScreen","final"], $=id=>document.getElementById(id);let musicStarted=false,fw=null;
-function show(id){screens.forEach(x=>$(x).classList.remove("active"));$(id).classList.add("active");scrollTo({top:0,behavior:"smooth"});if(id==="welcome")typeWelcome();if(id==="final")startFireworks()}
-const pad=n=>String(n).padStart(2,"0");function update(){let d=birthday-new Date();if(d<=0){show("welcome");return}let s=Math.floor(d/1000);$("days").textContent=pad(Math.floor(s/86400));$("hours").textContent=pad(Math.floor(s/3600)%24);$("mins").textContent=pad(Math.floor(s/60)%60);$("secs").textContent=pad(s%60)}update();setInterval(update,1000);
-for(let i=0;i<170;i++){let s=document.createElement("i");s.className="star";s.style.left=Math.random()*100+"%";s.style.top=Math.random()*100+"%";s.style.animationDelay=Math.random()*2.5+"s";$("stars").appendChild(s)}for(let i=0;i<5;i++){let s=document.createElement("i");s.className="shoot";s.style.left=(20+Math.random()*90)+"%";s.style.top=(5+Math.random()*50)+"%";s.style.animationDelay=(i*3+Math.random()*3)+"s";$("shootingStars").appendChild(s)}
-function startMusic(){if(musicStarted)return;let m=$("music");m.volume=.22;m.play().then(()=>{musicStarted=true;$("musicHint").textContent="♫ music on"}).catch(()=>{})}document.addEventListener("click",startMusic);
-function typeWelcome(){let el=$("welcomeText");if(el.dataset.done)return;let text="I made something just for you... take your time. ♥",i=0,t=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length){clearInterval(t);el.dataset.done=1}},38)}
-$("openBtn").onclick=()=>show("letter");$("envelope").onclick=()=>{$("envelope").classList.add("open");$("tapHint").style.opacity=0;setTimeout(()=>$("continueBtn").classList.remove("hidden"),1000)};$("continueBtn").onclick=()=>show("memories");$("videoBtn").onclick=()=>show("videoScreen");$("finishBtn").onclick=()=>{show("final");heartsBurst()};$("birthdayVideo").addEventListener("ended",()=>$("finishBtn").classList.add("ready"));
-function heartsBurst(){for(let i=0;i<24;i++){let h=document.createElement("div");h.className="heart";h.textContent=Math.random()>.22?"♥":"✦";h.style.left=Math.random()*100+"%";h.style.animationDelay=Math.random()*1.4+"s";h.style.fontSize=14+Math.random()*23+"px";$("hearts").appendChild(h);setTimeout(()=>h.remove(),6500)}}
-function startFireworks(){if(fw)return;let c=$("fireworks"),ctx=c.getContext("2d"),W,H,p=[];function resize(){W=c.width=innerWidth;H=c.height=innerHeight}addEventListener("resize",resize);resize();function burst(x,y){for(let i=0;i<65;i++){let a=Math.random()*Math.PI*2,s=1+Math.random()*4;p.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1})}}function loop(){ctx.clearRect(0,0,W,H);if(Math.random()<.035)burst(W*(.15+.7*Math.random()),H*(.15+.45*Math.random()));p.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.vy+=.025;q.life-=.012;ctx.globalAlpha=Math.max(0,q.life);ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(q.x,q.y,1.5,0,7);ctx.fill()});p=p.filter(q=>q.life>0);fw=requestAnimationFrame(loop)}loop()}
+```javascript
+document.addEventListener("DOMContentLoaded", () => {
+
+
+    /* =====================================================
+       SCENE NAVIGATION
+    ===================================================== */
+
+    const scenes =
+        document.querySelectorAll(".scene");
+
+
+    function showScene(id) {
+
+        scenes.forEach(scene => {
+            scene.classList.remove("active");
+        });
+
+        const target =
+            document.getElementById(id);
+
+        if (!target) return;
+
+        requestAnimationFrame(() => {
+            target.classList.add("active");
+        });
+    }
+
+
+    /* =====================================================
+       STARS
+    ===================================================== */
+
+    const stars =
+        document.getElementById("stars");
+
+
+    if (stars) {
+
+        for (let i = 0; i < 70; i++) {
+
+            const star =
+                document.createElement("span");
+
+            star.className = "star";
+
+            star.style.left =
+                Math.random() * 100 + "vw";
+
+            star.style.top =
+                Math.random() * 100 + "vh";
+
+            star.style.animationDelay =
+                Math.random() * 4 + "s";
+
+            star.style.animationDuration =
+                2 + Math.random() * 4 + "s";
+
+            stars.appendChild(star);
+        }
+    }
+
+
+    /* =====================================================
+       MUSIC
+    ===================================================== */
+
+    const music =
+        document.getElementById("music");
+
+    const musicToggle =
+        document.getElementById("musicToggle");
+
+
+    function playMusic() {
+
+        if (!music) return;
+
+        music.volume = 0.22;
+
+        music.play()
+            .then(() => {
+
+                if (musicToggle) {
+                    musicToggle.textContent = "♫";
+                }
+
+            })
+            .catch(() => {});
+    }
+
+
+    if (musicToggle) {
+
+        musicToggle.addEventListener("click", () => {
+
+            if (!music) return;
+
+            if (music.paused) {
+
+                playMusic();
+
+            } else {
+
+                music.pause();
+
+                musicToggle.textContent = "♪";
+            }
+        });
+    }
+
+
+    /* =====================================================
+       ENTER MUSEUM
+    ===================================================== */
+
+    const enterMuseum =
+        document.getElementById("enterMuseum");
+
+
+    if (enterMuseum) {
+
+        enterMuseum.addEventListener("click", () => {
+
+            playMusic();
+
+            showScene("gallery");
+
+        });
+    }
+
+
+    /* =====================================================
+       GALLERY
+    ===================================================== */
+
+    const artworks =
+        document.querySelectorAll(".artwork");
+
+    const viewer =
+        document.getElementById("artViewer");
+
+    const viewerImage =
+        document.getElementById("viewerImage");
+
+    const viewerNumber =
+        document.getElementById("viewerNumber");
+
+    const closeViewer =
+        document.getElementById("closeViewer");
+
+    const openedCount =
+        document.getElementById("openedCount");
+
+    const galleryHint =
+        document.getElementById("galleryHint");
+
+    const continueGallery =
+        document.getElementById("continueGallery");
+
+
+    let openedImages =
+        new Set();
+
+
+    artworks.forEach((artwork, index) => {
+
+        artwork.addEventListener("click", () => {
+
+            const imageName =
+                artwork.dataset.image;
+
+            const img =
+                artwork.querySelector("img");
+
+
+            if (
+                !imageName ||
+                !img ||
+                !viewer ||
+                !viewerImage
+            ) {
+                return;
+            }
+
+
+            viewerImage.src =
+                img.currentSrc ||
+                "./" + imageName;
+
+
+            if (viewerNumber) {
+
+                viewerNumber.textContent =
+                    String(index + 1)
+                        .padStart(2, "0");
+
+            }
+
+
+            viewer.classList.add("show");
+
+
+            openedImages.add(index);
+
+            if (openedCount) {
+
+                openedCount.textContent =
+                    openedImages.size;
+
+            }
+
+
+            if (
+                openedImages.size === 6
+            ) {
+
+                if (galleryHint) {
+
+                    galleryHint.textContent =
+                        "The entire collection has been explored.";
+
+                }
+
+
+                if (continueGallery) {
+
+                    continueGallery.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
+            } else {
+
+                if (galleryHint) {
+
+                    galleryHint.textContent =
+                        "Keep exploring the collection.";
+
+                }
+
+            }
+
+        });
+
+    });
+
+
+    if (closeViewer) {
+
+        closeViewer.addEventListener("click", () => {
+
+            viewer.classList.remove("show");
+
+        });
+
+    }
+
+
+    if (viewer) {
+
+        viewer.addEventListener("click", event => {
+
+            if (
+                event.target === viewer
+            ) {
+
+                viewer.classList.remove("show");
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       TO MESSAGE ROOM
+    ===================================================== */
+
+    if (continueGallery) {
+
+        continueGallery.addEventListener("click", () => {
+
+            showScene("messageRoom");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       MESSAGE → CINEMA
+    ===================================================== */
+
+    const toCinema =
+        document.getElementById("toCinema");
+
+
+    if (toCinema) {
+
+        toCinema.addEventListener("click", () => {
+
+            showScene("cinema");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       VIDEO
+    ===================================================== */
+
+    const mainVideo =
+        document.getElementById("mainVideo");
+
+
+    if (mainVideo) {
+
+        mainVideo.addEventListener(
+            "error",
+            () => {
+
+                console.error(
+                    "birthday.mp4 could not be loaded."
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       FINISH
+    ===================================================== */
+
+    const finishButton =
+        document.getElementById(
+            "finishButton"
+        );
+
+
+    if (finishButton) {
+
+        finishButton.addEventListener("click", () => {
+
+            showScene("finale");
+
+            createFinaleParticles();
+
+        });
+
+    }
+
+
+    /* =====================================================
+       FINALE PARTICLES
+    ===================================================== */
+
+    function createFinaleParticles() {
+
+        const container =
+            document.getElementById(
+                "finalParticles"
+            );
+
+
+        if (!container) return;
+
+
+        const symbols = [
+            "✦",
+            "✧",
+            "⋆",
+            "♥"
+        ];
+
+
+        for (let i = 0; i < 35; i++) {
+
+            const particle =
+                document.createElement("div");
+
+
+            particle.textContent =
+                symbols[
+                    Math.floor(
+                        Math.random() *
+                        symbols.length
+                    )
+                ];
+
+
+            particle.style.position =
+                "fixed";
+
+
+            particle.style.left =
+                Math.random() * 100 + "vw";
+
+
+            particle.style.top =
+                105 + Math.random() * 10 + "vh";
+
+
+            particle.style.fontSize =
+                10 + Math.random() * 18 + "px";
+
+
+            particle.style.color =
+                i % 4 === 3
+                    ? "rgba(255,120,159,.7)"
+                    : "rgba(216,180,124,.65)";
+
+
+            particle.style.pointerEvents =
+                "none";
+
+
+            particle.style.animation =
+                `rise ${
+                    5 + Math.random() * 5
+                }s linear forwards`;
+
+
+            container.appendChild(
+                particle
+            );
+
+
+            setTimeout(() => {
+                particle.remove();
+            }, 11000);
+
+        }
+
+    }
+
+
+    const style =
+        document.createElement("style");
+
+
+    style.textContent = `
+
+        @keyframes rise {
+
+            from {
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 1;
+            }
+
+            to {
+                transform:
+                    translateY(-120vh)
+                    rotate(35deg);
+
+                opacity: 0;
+            }
+
+        }
+
+    `;
+
+
+    document.head.appendChild(style);
+
+
+    /* =====================================================
+       RESTART
+    ===================================================== */
+
+    const restart =
+        document.getElementById(
+            "restart"
+        );
+
+
+    if (restart) {
+
+        restart.addEventListener("click", () => {
+
+            location.reload();
+
+        });
+
+    }
+
+});
+```
+```javascript
+document.addEventListener("DOMContentLoaded", () => {
+
+
+    /* =====================================================
+       SCENE NAVIGATION
+    ===================================================== */
+
+    const scenes =
+        document.querySelectorAll(".scene");
+
+
+    function showScene(id) {
+
+        scenes.forEach(scene => {
+            scene.classList.remove("active");
+        });
+
+        const target =
+            document.getElementById(id);
+
+        if (!target) return;
+
+        requestAnimationFrame(() => {
+            target.classList.add("active");
+        });
+    }
+
+
+    /* =====================================================
+       STARS
+    ===================================================== */
+
+    const stars =
+        document.getElementById("stars");
+
+
+    if (stars) {
+
+        for (let i = 0; i < 70; i++) {
+
+            const star =
+                document.createElement("span");
+
+            star.className = "star";
+
+            star.style.left =
+                Math.random() * 100 + "vw";
+
+            star.style.top =
+                Math.random() * 100 + "vh";
+
+            star.style.animationDelay =
+                Math.random() * 4 + "s";
+
+            star.style.animationDuration =
+                2 + Math.random() * 4 + "s";
+
+            stars.appendChild(star);
+        }
+    }
+
+
+    /* =====================================================
+       MUSIC
+    ===================================================== */
+
+    const music =
+        document.getElementById("music");
+
+    const musicToggle =
+        document.getElementById("musicToggle");
+
+
+    function playMusic() {
+
+        if (!music) return;
+
+        music.volume = 0.22;
+
+        music.play()
+            .then(() => {
+
+                if (musicToggle) {
+                    musicToggle.textContent = "♫";
+                }
+
+            })
+            .catch(() => {});
+    }
+
+
+    if (musicToggle) {
+
+        musicToggle.addEventListener("click", () => {
+
+            if (!music) return;
+
+            if (music.paused) {
+
+                playMusic();
+
+            } else {
+
+                music.pause();
+
+                musicToggle.textContent = "♪";
+            }
+        });
+    }
+
+
+    /* =====================================================
+       ENTER MUSEUM
+    ===================================================== */
+
+    const enterMuseum =
+        document.getElementById("enterMuseum");
+
+
+    if (enterMuseum) {
+
+        enterMuseum.addEventListener("click", () => {
+
+            playMusic();
+
+            showScene("gallery");
+
+        });
+    }
+
+
+    /* =====================================================
+       GALLERY
+    ===================================================== */
+
+    const artworks =
+        document.querySelectorAll(".artwork");
+
+    const viewer =
+        document.getElementById("artViewer");
+
+    const viewerImage =
+        document.getElementById("viewerImage");
+
+    const viewerNumber =
+        document.getElementById("viewerNumber");
+
+    const closeViewer =
+        document.getElementById("closeViewer");
+
+    const openedCount =
+        document.getElementById("openedCount");
+
+    const galleryHint =
+        document.getElementById("galleryHint");
+
+    const continueGallery =
+        document.getElementById("continueGallery");
+
+
+    let openedImages =
+        new Set();
+
+
+    artworks.forEach((artwork, index) => {
+
+        artwork.addEventListener("click", () => {
+
+            const imageName =
+                artwork.dataset.image;
+
+            const img =
+                artwork.querySelector("img");
+
+
+            if (
+                !imageName ||
+                !img ||
+                !viewer ||
+                !viewerImage
+            ) {
+                return;
+            }
+
+
+            viewerImage.src =
+                img.currentSrc ||
+                "./" + imageName;
+
+
+            if (viewerNumber) {
+
+                viewerNumber.textContent =
+                    String(index + 1)
+                        .padStart(2, "0");
+
+            }
+
+
+            viewer.classList.add("show");
+
+
+            openedImages.add(index);
+
+            if (openedCount) {
+
+                openedCount.textContent =
+                    openedImages.size;
+
+            }
+
+
+            if (
+                openedImages.size === 6
+            ) {
+
+                if (galleryHint) {
+
+                    galleryHint.textContent =
+                        "The entire collection has been explored.";
+
+                }
+
+
+                if (continueGallery) {
+
+                    continueGallery.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
+            } else {
+
+                if (galleryHint) {
+
+                    galleryHint.textContent =
+                        "Keep exploring the collection.";
+
+                }
+
+            }
+
+        });
+
+    });
+
+
+    if (closeViewer) {
+
+        closeViewer.addEventListener("click", () => {
+
+            viewer.classList.remove("show");
+
+        });
+
+    }
+
+
+    if (viewer) {
+
+        viewer.addEventListener("click", event => {
+
+            if (
+                event.target === viewer
+            ) {
+
+                viewer.classList.remove("show");
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       TO MESSAGE ROOM
+    ===================================================== */
+
+    if (continueGallery) {
+
+        continueGallery.addEventListener("click", () => {
+
+            showScene("messageRoom");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       MESSAGE → CINEMA
+    ===================================================== */
+
+    const toCinema =
+        document.getElementById("toCinema");
+
+
+    if (toCinema) {
+
+        toCinema.addEventListener("click", () => {
+
+            showScene("cinema");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       VIDEO
+    ===================================================== */
+
+    const mainVideo =
+        document.getElementById("mainVideo");
+
+
+    if (mainVideo) {
+
+        mainVideo.addEventListener(
+            "error",
+            () => {
+
+                console.error(
+                    "birthday.mp4 could not be loaded."
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       FINISH
+    ===================================================== */
+
+    const finishButton =
+        document.getElementById(
+            "finishButton"
+        );
+
+
+    if (finishButton) {
+
+        finishButton.addEventListener("click", () => {
+
+            showScene("finale");
+
+            createFinaleParticles();
+
+        });
+
+    }
+
+
+    /* =====================================================
+       FINALE PARTICLES
+    ===================================================== */
+
+    function createFinaleParticles() {
+
+        const container =
+            document.getElementById(
+                "finalParticles"
+            );
+
+
+        if (!container) return;
+
+
+        const symbols = [
+            "✦",
+            "✧",
+            "⋆",
+            "♥"
+        ];
+
+
+        for (let i = 0; i < 35; i++) {
+
+            const particle =
+                document.createElement("div");
+
+
+            particle.textContent =
+                symbols[
+                    Math.floor(
+                        Math.random() *
+                        symbols.length
+                    )
+                ];
+
+
+            particle.style.position =
+                "fixed";
+
+
+            particle.style.left =
+                Math.random() * 100 + "vw";
+
+
+            particle.style.top =
+                105 + Math.random() * 10 + "vh";
+
+
+            particle.style.fontSize =
+                10 + Math.random() * 18 + "px";
+
+
+            particle.style.color =
+                i % 4 === 3
+                    ? "rgba(255,120,159,.7)"
+                    : "rgba(216,180,124,.65)";
+
+
+            particle.style.pointerEvents =
+                "none";
+
+
+            particle.style.animation =
+                `rise ${
+                    5 + Math.random() * 5
+                }s linear forwards`;
+
+
+            container.appendChild(
+                particle
+            );
+
+
+            setTimeout(() => {
+                particle.remove();
+            }, 11000);
+
+        }
+
+    }
+
+
+    const style =
+        document.createElement("style");
+
+
+    style.textContent = `
+
+        @keyframes rise {
+
+            from {
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 1;
+            }
+
+            to {
+                transform:
+                    translateY(-120vh)
+                    rotate(35deg);
+
+                opacity: 0;
+            }
+
+        }
+
+    `;
+
+
+    document.head.appendChild(style);
+
+
+    /* =====================================================
+       RESTART
+    ===================================================== */
+
+    const restart =
+        document.getElementById(
+            "restart"
+        );
+
+
+    if (restart) {
+
+        restart.addEventListener("click", () => {
+
+            location.reload();
+
+        });
+
+    }
+
+});
+```
