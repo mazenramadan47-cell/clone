@@ -1,266 +1,478 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Radoda Memory Museum</title>
+    <meta charset="UTF-8">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <title>The Radoda Memory Museum</title>
 
-<link rel="stylesheet" href="./style.css">
+    <!-- Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="./style.css">
+
 </head>
+
 
 <body>
 
-<!-- Ambient background -->
-<div class="grain"></div>
-<div class="ambient-light"></div>
-<div class="stars" id="stars"></div>
 
-<!-- Music -->
-<audio id="music" loop preload="auto">
-    <source src="./music.mp3" type="audio/mpeg">
+<!-- =====================================================
+     AMBIENT BACKGROUND
+===================================================== -->
+
+<div class="grain"></div>
+
+<div class="ambient-light"></div>
+
+<div class="stars"
+     id="stars">
+</div>
+
+
+<!-- =====================================================
+     MUSIC
+===================================================== -->
+
+<audio id="music"
+       loop
+       preload="auto">
+
+    <source src="./music.mp3"
+            type="audio/mpeg">
+
 </audio>
 
-<button id="musicToggle" class="music-toggle">
+
+<button id="musicToggle"
+        class="music-toggle"
+        type="button">
+
     ♫
+
 </button>
 
 
 <!-- =====================================================
-     INTRO / MUSEUM LOBBY
+     APPLICATION
 ===================================================== -->
 
 <main id="app">
 
-<section id="lobby" class="scene active">
+
+<!-- =====================================================
+     SCENE 1 — MUSEUM LOBBY
+===================================================== -->
+
+<section id="lobby"
+         class="scene active">
+
 
     <div class="lobby-content">
 
-        <div class="museum-mark">✦</div>
+
+        <div class="museum-mark">
+            ✦
+        </div>
+
 
         <div class="museum-label">
             PRIVATE COLLECTION · 2026
         </div>
+
 
         <h1>
             The Memory<br>
             <span>Museum</span>
         </h1>
 
+
         <p class="intro-copy">
             A small collection of moments,<br>
             preserved for one very special person.
         </p>
 
-        <button id="enterMuseum" class="enter-btn">
+
+        <button id="enterMuseum"
+                class="enter-btn"
+                type="button">
+
             ENTER THE EXHIBITION
-            <span>↗</span>
+
+            <span>
+                ↗
+            </span>
+
         </button>
+
 
         <div class="lobby-note">
             headphones recommended
         </div>
 
+
     </div>
+
 
 </section>
 
 
 <!-- =====================================================
-     MAIN GALLERY
+     SCENE 2 — PHOTO GALLERY
 ===================================================== -->
 
-<section id="gallery" class="scene">
+<section id="gallery"
+         class="scene">
+
+
+    <!-- HEADER -->
 
     <header class="gallery-header">
 
+
         <div>
+
             <div class="museum-label">
                 EXHIBITION 01
             </div>
 
+
             <h2>
                 Things worth remembering.
             </h2>
+
         </div>
 
+
         <div class="gallery-progress">
-            <span id="openedCount">0</span> / 6
+
+            <span id="openedCount">
+                0
+            </span>
+
+            / 6
+
         </div>
+
 
     </header>
 
 
+    <!-- ARTWORKS -->
+
     <div class="gallery-floor">
 
-        <div class="artwork" data-image="01.JPG">
+
+        <!-- IMAGE 01 -->
+
+        <div class="artwork"
+             data-image="01.JPG">
+
 
             <div class="frame">
-                <img src="./01.JPG" alt="Memory 1">
+
+                <img src="./01.JPG"
+                     alt="Memory 1"
+                     loading="eager">
+
             </div>
 
+
             <div class="art-title">
-                <span>01</span>
+
+                <span>
+                    01
+                </span>
+
                 A moment
+
             </div>
+
 
         </div>
 
 
-        <div class="artwork" data-image="02.JPG">
+        <!-- IMAGE 02 -->
+
+        <div class="artwork"
+             data-image="02.JPG">
+
 
             <div class="frame">
-                <img src="./02.JPG" alt="Memory 2">
+
+                <img src="./02.JPG"
+                     alt="Memory 2"
+                     loading="eager">
+
             </div>
 
+
             <div class="art-title">
-                <span>02</span>
+
+                <span>
+                    02
+                </span>
+
                 A little happiness
+
             </div>
+
 
         </div>
 
 
-        <div class="artwork" data-image="03.JPG">
+        <!-- IMAGE 03 -->
+
+        <div class="artwork"
+             data-image="03.JPG">
+
 
             <div class="frame">
-                <img src="./03.JPG" alt="Memory 3">
+
+                <img src="./03.JPG"
+                     alt="Memory 3"
+                     loading="eager">
+
             </div>
 
+
             <div class="art-title">
-                <span>03</span>
+
+                <span>
+                    03
+                </span>
+
                 One to keep
+
             </div>
+
 
         </div>
 
 
-        <div class="artwork" data-image="04.JPG">
+        <!-- IMAGE 04 -->
+
+        <div class="artwork"
+             data-image="04.JPG">
+
 
             <div class="frame">
-                <img src="./04.JPG" alt="Memory 4">
+
+                <img src="./04.JPG"
+                     alt="Memory 4"
+                     loading="eager">
+
             </div>
 
+
             <div class="art-title">
-                <span>04</span>
+
+                <span>
+                    04
+                </span>
+
                 Somewhere in time
+
             </div>
+
 
         </div>
 
 
-        <div class="artwork" data-image="05.JPG">
+        <!-- IMAGE 05 -->
+
+        <div class="artwork"
+             data-image="05.JPG">
+
 
             <div class="frame">
-                <img src="./05.JPG" alt="Memory 5">
+
+                <img src="./05.JPG"
+                     alt="Memory 5"
+                     loading="eager">
+
             </div>
 
+
             <div class="art-title">
-                <span>05</span>
+
+                <span>
+                    05
+                </span>
+
                 Another chapter
+
             </div>
+
 
         </div>
 
 
-        <div class="artwork" data-image="06.JPG">
+        <!-- IMAGE 06 -->
+
+        <div class="artwork"
+             data-image="06.JPG">
+
 
             <div class="frame">
-                <img src="./06.JPG" alt="Memory 6">
+
+                <img src="./06.JPG"
+                     alt="Memory 6"
+                     loading="eager">
+
             </div>
+
 
             <div class="art-title">
-                <span>06</span>
+
+                <span>
+                    06
+                </span>
+
                 And still more
+
             </div>
 
+
         </div>
+
 
     </div>
 
 
+    <!-- FOOTER -->
+
     <div class="gallery-footer">
+
 
         <p id="galleryHint">
             Walk through the collection.
         </p>
 
-        <button id="continueGallery" class="continue-btn hidden">
+
+        <button id="continueGallery"
+                class="continue-btn hidden"
+                type="button">
+
             Continue to the next room →
+
         </button>
 
+
     </div>
+
 
 </section>
 
 
 <!-- =====================================================
-     ARTWORK VIEWER
+     IMAGE VIEWER
 ===================================================== -->
 
-<div id="artViewer" class="viewer">
+<div id="artViewer"
+     class="viewer">
 
-    <button id="closeViewer" class="viewer-close">
+
+    <button id="closeViewer"
+            class="viewer-close"
+            type="button">
+
         ×
+
     </button>
+
 
     <div class="viewer-inner">
 
-        <div class="viewer-number" id="viewerNumber">
+
+        <div id="viewerNumber"
+             class="viewer-number">
+
             01
+
         </div>
 
-        <img id="viewerImage" src="" alt="Memory">
+
+        <img id="viewerImage"
+             src=""
+             alt="Memory">
+
 
         <div class="viewer-caption">
+
             Some moments don't need an explanation.
+
         </div>
 
+
     </div>
+
 
 </div>
 
 
 <!-- =====================================================
-     LETTER ROOM
+     SCENE 3 — MESSAGE ROOM
 ===================================================== -->
 
-<section id="messageRoom" class="scene">
+<section id="messageRoom"
+         class="scene">
+
 
     <div class="room-top">
+
+
         <div class="museum-label">
             EXHIBITION 02
         </div>
 
+
         <div class="room-number">
             ROOM II
         </div>
+
+
     </div>
 
 
     <div class="message-room-content">
 
+
         <div class="display-card">
+
 
             <div class="card-number">
                 ARCHIVE 31.08
             </div>
 
+
             <div class="card-symbol">
                 ✦
             </div>
+
 
             <h2>
                 For Radoda
             </h2>
 
-            <div class="divider"></div>
+
+            <div class="divider">
+            </div>
+
 
             <p>
                 Some things are difficult to wrap,
@@ -268,14 +480,17 @@
                 and impossible to buy.
             </p>
 
+
             <p>
                 So I made this instead.
             </p>
+
 
             <p>
                 A tiny place where a few memories
                 could stay for a while.
             </p>
+
 
             <p>
                 I hope this year gives you more
@@ -284,122 +499,186 @@
                 exactly the way you want them to.
             </p>
 
+
             <div class="signature">
                 With love, ❤️
             </div>
 
+
         </div>
+
 
     </div>
 
 
-    <button id="toCinema" class="continue-btn">
+    <button id="toCinema"
+            class="continue-btn"
+            type="button">
+
         Enter the cinema →
+
     </button>
+
 
 </section>
 
 
 <!-- =====================================================
-     CINEMA
+     SCENE 4 — CINEMA
 ===================================================== -->
 
-<section id="cinema" class="scene">
+<section id="cinema"
+         class="scene">
+
 
     <div class="cinema-header">
+
 
         <div class="museum-label">
             FINAL EXHIBITION
         </div>
 
+
         <h2>
             Moving pictures.
         </h2>
 
+
         <p>
             The last piece of the collection.
         </p>
+
 
     </div>
 
 
     <div class="screen-frame">
 
+
         <div class="screen-top">
-            <span>NOW SHOWING</span>
-            <span>01 / 01</span>
+
+            <span>
+                NOW SHOWING
+            </span>
+
+            <span>
+                01 / 01
+            </span>
+
         </div>
+
+
+        <!-- IMPORTANT:
+             Actual video file is birthday.mp4
+        -->
 
         <video id="mainVideo"
                controls
                playsinline
                preload="metadata">
 
-            <source src="./birthday.mp4" type="video/mp4">
+            <source src="./birthday.mp4"
+                    type="video/mp4">
 
-            Your browser does not support video playback.
+            Your browser does not support
+            video playback.
 
         </video>
+
 
     </div>
 
 
-    <button id="finishButton" class="enter-btn">
+    <button id="finishButton"
+            class="enter-btn"
+            type="button">
+
         CLOSE THE EXHIBITION
-        <span>✦</span>
+
+        <span>
+            ✦
+        </span>
+
     </button>
+
 
 </section>
 
 
 <!-- =====================================================
-     FINAL
+     SCENE 5 — FINALE
 ===================================================== -->
 
-<section id="finale" class="scene">
+<section id="finale"
+         class="scene">
+
 
     <div class="finale-content">
 
-        <div class="museum-mark">✦</div>
+
+        <div class="museum-mark">
+            ✦
+        </div>
+
 
         <div class="museum-label">
             EXHIBITION CLOSED
         </div>
+
 
         <h1>
             Happy Birthday,<br>
             <span>Radoda.</span>
         </h1>
 
+
         <p>
             Some memories are worth keeping.
         </p>
+
 
         <p>
             Some people are worth celebrating.
         </p>
 
-        <div class="final-line"></div>
+
+        <div class="final-line">
+        </div>
+
 
         <div class="final-small">
             Thank you for being part of the story.
         </div>
 
-        <button id="restart" class="restart-btn">
+
+        <button id="restart"
+                class="restart-btn"
+                type="button">
+
             Visit the museum again ↻
+
         </button>
+
 
     </div>
 
-    <div id="finalParticles"></div>
+
+    <div id="finalParticles">
+    </div>
+
 
 </section>
+
 
 </main>
 
 
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
 <script src="./script.js"></script>
+
 
 </body>
 </html>
-```
