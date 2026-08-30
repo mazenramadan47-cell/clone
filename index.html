@@ -1,8 +1,405 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>For Radoda ❤️</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><div id="stars"></div><div id="shootingStars"></div><div class="hearts"></div><div id="musicHint">♫ Tap anywhere for music</div><main>
-<section id="countdown" class="screen active"><div class="orb"></div><div class="eyebrow">A little surprise is waiting...</div><h1>For <span>Radoda</span> <i>♥</i></h1><p class="sub">Come back when the clock strikes midnight.</p><div class="timer"><div><b id="days">00</b><small>DAYS</small></div><div><b id="hours">00</b><small>HOURS</small></div><div><b id="mins">00</b><small>MINUTES</small></div><div><b id="secs">00</b><small>SECONDS</small></div></div><div class="date">31 AUGUST · 12:00 AM</div><button id="testBtn" class="testBtn">⚡ Skip countdown — TEST</button></section>
-<section id="welcome" class="screen"><div class="sparkle">✦</div><div class="eyebrow">It's finally midnight...</div><h1>Happy Birthday<br><span>Radoda</span> <i>♥</i></h1><p class="sub type" id="welcomeText"></p><button id="openBtn">Open your surprise <strong>→</strong></button></section>
-<section id="letter" class="screen"><div class="eyebrow">A message for you</div><div class="envelope" id="envelope"><div class="env-back"></div><div class="letter-paper"><p>Radoda,</p><p>Before you see what I made, I just want you to know that this little surprise comes from the heart.</p><p>Some memories are too special to leave inside a camera roll.</p><p class="signature">— With love ♥</p></div><div class="flap"></div><div class="env-front"></div></div><p class="tapHint" id="tapHint">Tap the envelope</p><button id="continueBtn" class="hidden">Keep going <strong>→</strong></button></section>
-<section id="memories" class="screen"><div class="eyebrow">A few little memories</div><h2>Moments worth keeping <i>♥</i></h2><p class="sub">Replace the sample photos with your own.</p><div class="gallery"><figure class="photo-card"><img src="photos/01.jpg" alt="Memory 1"><figcaption>One of my favorite memories.</figcaption></figure><figure class="photo-card"><img src="photos/02.jpg" alt="Memory 2"><figcaption>Another moment I never want to forget.</figcaption></figure><figure class="photo-card"><img src="photos/03.jpg" alt="Memory 3"><figcaption>And then there was us...</figcaption></figure><figure class="photo-card"><img src="photos/04.jpg" alt="Memory 4"><figcaption>A little piece of our story.</figcaption></figure><figure class="photo-card"><img src="photos/05.jpg" alt="Memory 5"><figcaption>More memories, more reasons to smile.</figcaption></figure><figure class="photo-card"><img src="photos/06.jpg" alt="Memory 6"><figcaption>And this is only the beginning. ♥</figcaption></figure></div><button id="videoBtn">There is one more thing... <strong>→</strong></button></section>
-<section id="videoScreen" class="screen"><div class="eyebrow">The part I made especially for you</div><h2>I saved something special <i>♥</i></h2><p class="sub">Press play when you're ready.</p><div class="videoWrap"><video id="birthdayVideo" controls playsinline preload="metadata"><source src="birthday.mp4" type="video/mp4"></video></div><button id="finishBtn">Finish the surprise <strong>✦</strong></button></section>
-<section id="final" class="screen"><canvas id="fireworks"></canvas><div class="finalContent"><div class="sparkle">✦</div><div class="eyebrow">One last thing...</div><h1>Happy Birthday,<br><span>Radoda</span> <i>♥</i></h1><p class="final-text">I hope this little surprise made you smile.<br><br>May this year bring you beautiful moments, happy memories, and everything your heart deserves.<br><br><b>And I hope I get to be there for many of them. ♥</b></p><div class="end">Made with love.</div></div></section></main><audio id="music" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio><script src="script.js"></script><script>document.getElementById("testBtn").addEventListener("click",()=>show("welcome"));</script>
-</body></html>
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Radoda Memory Museum</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<!-- Ambient background -->
+<div class="grain"></div>
+<div class="ambient-light"></div>
+<div class="stars" id="stars"></div>
+
+<!-- Music -->
+<audio id="music" loop preload="auto">
+    <source src="./music.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicToggle" class="music-toggle">
+    ♫
+</button>
+
+
+<!-- =====================================================
+     INTRO / MUSEUM LOBBY
+===================================================== -->
+
+<main id="app">
+
+<section id="lobby" class="scene active">
+
+    <div class="lobby-content">
+
+        <div class="museum-mark">✦</div>
+
+        <div class="museum-label">
+            PRIVATE COLLECTION · 2026
+        </div>
+
+        <h1>
+            The Memory<br>
+            <span>Museum</span>
+        </h1>
+
+        <p class="intro-copy">
+            A small collection of moments,<br>
+            preserved for one very special person.
+        </p>
+
+        <button id="enterMuseum" class="enter-btn">
+            ENTER THE EXHIBITION
+            <span>↗</span>
+        </button>
+
+        <div class="lobby-note">
+            headphones recommended
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MAIN GALLERY
+===================================================== -->
+
+<section id="gallery" class="scene">
+
+    <header class="gallery-header">
+
+        <div>
+            <div class="museum-label">
+                EXHIBITION 01
+            </div>
+
+            <h2>
+                Things worth remembering.
+            </h2>
+        </div>
+
+        <div class="gallery-progress">
+            <span id="openedCount">0</span> / 6
+        </div>
+
+    </header>
+
+
+    <div class="gallery-floor">
+
+        <div class="artwork" data-image="01.JPG">
+
+            <div class="frame">
+                <img src="./01.JPG" alt="Memory 1">
+            </div>
+
+            <div class="art-title">
+                <span>01</span>
+                A moment
+            </div>
+
+        </div>
+
+
+        <div class="artwork" data-image="02.JPG">
+
+            <div class="frame">
+                <img src="./02.JPG" alt="Memory 2">
+            </div>
+
+            <div class="art-title">
+                <span>02</span>
+                A little happiness
+            </div>
+
+        </div>
+
+
+        <div class="artwork" data-image="03.JPG">
+
+            <div class="frame">
+                <img src="./03.JPG" alt="Memory 3">
+            </div>
+
+            <div class="art-title">
+                <span>03</span>
+                One to keep
+            </div>
+
+        </div>
+
+
+        <div class="artwork" data-image="04.JPG">
+
+            <div class="frame">
+                <img src="./04.JPG" alt="Memory 4">
+            </div>
+
+            <div class="art-title">
+                <span>04</span>
+                Somewhere in time
+            </div>
+
+        </div>
+
+
+        <div class="artwork" data-image="05.JPG">
+
+            <div class="frame">
+                <img src="./05.JPG" alt="Memory 5">
+            </div>
+
+            <div class="art-title">
+                <span>05</span>
+                Another chapter
+            </div>
+
+        </div>
+
+
+        <div class="artwork" data-image="06.JPG">
+
+            <div class="frame">
+                <img src="./06.JPG" alt="Memory 6">
+            </div>
+
+            <div class="art-title">
+                <span>06</span>
+                And still more
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="gallery-footer">
+
+        <p id="galleryHint">
+            Walk through the collection.
+        </p>
+
+        <button id="continueGallery" class="continue-btn hidden">
+            Continue to the next room →
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ARTWORK VIEWER
+===================================================== -->
+
+<div id="artViewer" class="viewer">
+
+    <button id="closeViewer" class="viewer-close">
+        ×
+    </button>
+
+    <div class="viewer-inner">
+
+        <div class="viewer-number" id="viewerNumber">
+            01
+        </div>
+
+        <img id="viewerImage" src="" alt="Memory">
+
+        <div class="viewer-caption">
+            Some moments don't need an explanation.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     LETTER ROOM
+===================================================== -->
+
+<section id="messageRoom" class="scene">
+
+    <div class="room-top">
+        <div class="museum-label">
+            EXHIBITION 02
+        </div>
+
+        <div class="room-number">
+            ROOM II
+        </div>
+    </div>
+
+
+    <div class="message-room-content">
+
+        <div class="display-card">
+
+            <div class="card-number">
+                ARCHIVE 31.08
+            </div>
+
+            <div class="card-symbol">
+                ✦
+            </div>
+
+            <h2>
+                For Radoda
+            </h2>
+
+            <div class="divider"></div>
+
+            <p>
+                Some things are difficult to wrap,
+                difficult to photograph,
+                and impossible to buy.
+            </p>
+
+            <p>
+                So I made this instead.
+            </p>
+
+            <p>
+                A tiny place where a few memories
+                could stay for a while.
+            </p>
+
+            <p>
+                I hope this year gives you more
+                reasons to laugh, more moments worth
+                remembering, and more days that feel
+                exactly the way you want them to.
+            </p>
+
+            <div class="signature">
+                With love, ❤️
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button id="toCinema" class="continue-btn">
+        Enter the cinema →
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     CINEMA
+===================================================== -->
+
+<section id="cinema" class="scene">
+
+    <div class="cinema-header">
+
+        <div class="museum-label">
+            FINAL EXHIBITION
+        </div>
+
+        <h2>
+            Moving pictures.
+        </h2>
+
+        <p>
+            The last piece of the collection.
+        </p>
+
+    </div>
+
+
+    <div class="screen-frame">
+
+        <div class="screen-top">
+            <span>NOW SHOWING</span>
+            <span>01 / 01</span>
+        </div>
+
+        <video id="mainVideo"
+               controls
+               playsinline
+               preload="metadata">
+
+            <source src="./birthday.mp4" type="video/mp4">
+
+            Your browser does not support video playback.
+
+        </video>
+
+    </div>
+
+
+    <button id="finishButton" class="enter-btn">
+        CLOSE THE EXHIBITION
+        <span>✦</span>
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     FINAL
+===================================================== -->
+
+<section id="finale" class="scene">
+
+    <div class="finale-content">
+
+        <div class="museum-mark">✦</div>
+
+        <div class="museum-label">
+            EXHIBITION CLOSED
+        </div>
+
+        <h1>
+            Happy Birthday,<br>
+            <span>Radoda.</span>
+        </h1>
+
+        <p>
+            Some memories are worth keeping.
+        </p>
+
+        <p>
+            Some people are worth celebrating.
+        </p>
+
+        <div class="final-line"></div>
+
+        <div class="final-small">
+            Thank you for being part of the story.
+        </div>
+
+        <button id="restart" class="restart-btn">
+            Visit the museum again ↻
+        </button>
+
+    </div>
+
+    <div id="finalParticles"></div>
+
+</section>
+
+</main>
+
+
+<script src="./script.js"></script>
+
+</body>
+</html>
+```
