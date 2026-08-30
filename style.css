@@ -722,3 +722,69 @@ button {
 
 }
 ```
+/* =========================================================
+   FINAL INTERACTION FIX
+========================================================= */
+
+#app {
+    position: relative;
+    z-index: 10;
+}
+
+.scene {
+    z-index: 20;
+    pointer-events: none;
+}
+
+.scene.active {
+    pointer-events: auto;
+}
+
+/* Background must NEVER block clicks */
+
+.grain,
+.ambient-light,
+.stars,
+.star {
+    pointer-events: none !important;
+}
+
+.music-toggle {
+    z-index: 5000 !important;
+    pointer-events: auto !important;
+}
+
+.viewer {
+    z-index: 6000 !important;
+    pointer-events: none;
+}
+
+.viewer.show {
+    pointer-events: auto;
+}
+
+.viewer button,
+.viewer img {
+    pointer-events: auto;
+}
+
+
+/* Make every interactive element safely clickable */
+
+button,
+.artwork,
+.enter-btn,
+.continue-btn {
+    position: relative;
+    z-index: 50;
+    pointer-events: auto;
+}
+
+
+/* Mobile touch */
+
+button,
+.artwork {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
