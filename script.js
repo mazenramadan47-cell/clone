@@ -1,29 +1,44 @@
-```javascript
 document.addEventListener("DOMContentLoaded", () => {
+
+    console.log("RADODA WEBSITE LOADED");
 
 
     /* =====================================================
-       SCENE NAVIGATION
+       HELPERS
     ===================================================== */
 
-    const scenes =
-        document.querySelectorAll(".scene");
+    const $ = (selector) =>
+        document.querySelector(selector);
+
+    const $$ = (selector) =>
+        document.querySelectorAll(selector);
+
+
+    /* =====================================================
+       SCENES
+    ===================================================== */
+
+    const scenes = $$(".scene");
 
 
     function showScene(id) {
+
+        console.log("Opening scene:", id);
 
         scenes.forEach(scene => {
             scene.classList.remove("active");
         });
 
-        const target =
-            document.getElementById(id);
+        const target = document.getElementById(id);
 
-        if (!target) return;
+        if (!target) {
+            console.error("Scene not found:", id);
+            return;
+        }
 
-        requestAnimationFrame(() => {
-            target.classList.add("active");
-        });
+        target.classList.add("active");
+
+        target.scrollTop = 0;
     }
 
 
@@ -31,16 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
        STARS
     ===================================================== */
 
-    const stars =
-        document.getElementById("stars");
-
+    const stars = $("#stars");
 
     if (stars) {
 
         for (let i = 0; i < 70; i++) {
 
-            const star =
-                document.createElement("span");
+            const star = document.createElement("span");
 
             star.className = "star";
 
@@ -65,48 +77,70 @@ document.addEventListener("DOMContentLoaded", () => {
        MUSIC
     ===================================================== */
 
-    const music =
-        document.getElementById("music");
+    const music = $("#music");
+    const musicToggle = $("#musicToggle");
 
-    const musicToggle =
-        document.getElementById("musicToggle");
+    let musicStarted = false;
 
 
-    function playMusic() {
+    async function startMusic() {
 
-        if (!music) return;
+        if (!music) {
+            console.error("Music element not found!");
+            return;
+        }
 
-        music.volume = 0.22;
+        try {
 
-        music.play()
-            .then(() => {
+            music.volume = 0.22;
 
-                if (musicToggle) {
-                    musicToggle.textContent = "♫";
-                }
+            await music.play();
 
-            })
-            .catch(() => {});
+            musicStarted = true;
+
+            if (musicToggle) {
+                musicToggle.textContent = "♫";
+            }
+
+            console.log("Music started.");
+
+        } catch (error) {
+
+            console.log(
+                "Browser blocked music:",
+                error
+            );
+
+        }
     }
 
 
     if (musicToggle) {
 
-        musicToggle.addEventListener("click", () => {
+        musicToggle.addEventListener(
+            "click",
+            async (event) => {
 
-            if (!music) return;
+                event.preventDefault();
+                event.stopPropagation();
 
-            if (music.paused) {
+                if (!music) return;
 
-                playMusic();
+                if (music.paused) {
 
-            } else {
+                    await startMusic();
 
-                music.pause();
+                } else {
 
-                musicToggle.textContent = "♪";
+                    music.pause();
+
+                    musicToggle.textContent = "♪";
+
+                }
+
             }
-        });
+        );
+
     }
 
 
@@ -114,19 +148,27 @@ document.addEventListener("DOMContentLoaded", () => {
        ENTER MUSEUM
     ===================================================== */
 
-    const enterMuseum =
-        document.getElementById("enterMuseum");
-
+    const enterMuseum = $("#enterMuseum");
 
     if (enterMuseum) {
 
-        enterMuseum.addEventListener("click", () => {
+        enterMuseum.addEventListener(
+            "click",
+            async (event) => {
 
-            playMusic();
+                event.preventDefault();
+                event.stopPropagation();
 
-            showScene("gallery");
+                console.log("ENTER clicked");
 
-        });
+                /* Start music from actual user click */
+                await startMusic();
+
+                showScene("gallery");
+
+            }
+        );
+
     }
 
 
@@ -135,176 +177,235 @@ document.addEventListener("DOMContentLoaded", () => {
     ===================================================== */
 
     const artworks =
-        document.querySelectorAll(".artwork");
+        $$(".artwork");
 
     const viewer =
-        document.getElementById("artViewer");
+        $("#artViewer");
 
     const viewerImage =
-        document.getElementById("viewerImage");
+        $("#viewerImage");
 
     const viewerNumber =
-        document.getElementById("viewerNumber");
+        $("#viewerNumber");
 
     const closeViewer =
-        document.getElementById("closeViewer");
+        $("#closeViewer");
 
     const openedCount =
-        document.getElementById("openedCount");
+        $("#openedCount");
 
     const galleryHint =
-        document.getElementById("galleryHint");
+        $("#galleryHint");
 
     const continueGallery =
-        document.getElementById("continueGallery");
+        $("#continueGallery");
 
 
-    let openedImages =
+    const openedImages =
         new Set();
 
 
     artworks.forEach((artwork, index) => {
 
-        artwork.addEventListener("click", () => {
+        artwork.addEventListener(
+            "click",
+            (event) => {
 
-            const imageName =
-                artwork.dataset.image;
+                event.preventDefault();
+                event.stopPropagation();
 
-            const img =
-                artwork.querySelector("img");
-
-
-            if (
-                !imageName ||
-                !img ||
-                !viewer ||
-                !viewerImage
-            ) {
-                return;
-            }
+                console.log(
+                    "Artwork clicked:",
+                    index + 1
+                );
 
 
-            viewerImage.src =
-                img.currentSrc ||
-                "./" + imageName;
+                const image =
+                    artwork.querySelector("img");
 
 
-            if (viewerNumber) {
+                if (!image) {
 
-                viewerNumber.textContent =
-                    String(index + 1)
-                        .padStart(2, "0");
-
-            }
-
-
-            viewer.classList.add("show");
-
-
-            openedImages.add(index);
-
-            if (openedCount) {
-
-                openedCount.textContent =
-                    openedImages.size;
-
-            }
-
-
-            if (
-                openedImages.size === 6
-            ) {
-
-                if (galleryHint) {
-
-                    galleryHint.textContent =
-                        "The entire collection has been explored.";
-
-                }
-
-
-                if (continueGallery) {
-
-                    continueGallery.classList.remove(
-                        "hidden"
+                    console.error(
+                        "Image missing"
                     );
 
+                    return;
+
                 }
 
-            } else {
 
-                if (galleryHint) {
+                if (!viewer || !viewerImage) {
 
-                    galleryHint.textContent =
-                        "Keep exploring the collection.";
+                    console.error(
+                        "Viewer missing"
+                    );
+
+                    return;
+
+                }
+
+
+                viewerImage.src =
+                    image.currentSrc ||
+                    image.src;
+
+
+                if (viewerNumber) {
+
+                    viewerNumber.textContent =
+                        String(index + 1)
+                            .padStart(2, "0");
+
+                }
+
+
+                viewer.classList.add("show");
+
+
+                openedImages.add(index);
+
+
+                if (openedCount) {
+
+                    openedCount.textContent =
+                        openedImages.size;
+
+                }
+
+
+                if (
+                    openedImages.size === 6
+                ) {
+
+                    if (galleryHint) {
+
+                        galleryHint.textContent =
+                            "The entire collection has been explored.";
+
+                    }
+
+
+                    if (continueGallery) {
+
+                        continueGallery.classList.remove(
+                            "hidden"
+                        );
+
+                    }
+
+                } else {
+
+                    if (galleryHint) {
+
+                        galleryHint.textContent =
+                            "Keep exploring the collection.";
+
+                    }
 
                 }
 
             }
-
-        });
+        );
 
     });
 
 
+    /* =====================================================
+       CLOSE VIEWER
+    ===================================================== */
+
     if (closeViewer) {
 
-        closeViewer.addEventListener("click", () => {
+        closeViewer.addEventListener(
+            "click",
+            (event) => {
 
-            viewer.classList.remove("show");
+                event.preventDefault();
+                event.stopPropagation();
 
-        });
+                viewer.classList.remove("show");
+
+            }
+        );
 
     }
 
 
     if (viewer) {
 
-        viewer.addEventListener("click", event => {
+        viewer.addEventListener(
+            "click",
+            (event) => {
 
-            if (
-                event.target === viewer
-            ) {
+                if (
+                    event.target === viewer
+                ) {
 
-                viewer.classList.remove("show");
+                    viewer.classList.remove(
+                        "show"
+                    );
+
+                }
 
             }
-
-        });
+        );
 
     }
 
 
     /* =====================================================
-       TO MESSAGE ROOM
+       CONTINUE FROM GALLERY
     ===================================================== */
 
     if (continueGallery) {
 
-        continueGallery.addEventListener("click", () => {
+        continueGallery.addEventListener(
+            "click",
+            (event) => {
 
-            showScene("messageRoom");
+                event.preventDefault();
+                event.stopPropagation();
 
-        });
+                console.log(
+                    "Continue gallery clicked"
+                );
+
+                showScene(
+                    "messageRoom"
+                );
+
+            }
+        );
 
     }
 
 
     /* =====================================================
-       MESSAGE → CINEMA
+       MESSAGE ROOM
     ===================================================== */
 
     const toCinema =
-        document.getElementById("toCinema");
+        $("#toCinema");
 
 
     if (toCinema) {
 
-        toCinema.addEventListener("click", () => {
+        toCinema.addEventListener(
+            "click",
+            (event) => {
 
-            showScene("cinema");
+                event.preventDefault();
+                event.stopPropagation();
 
-        });
+                console.log(
+                    "Cinema clicked"
+                );
+
+                showScene("cinema");
+
+            }
+        );
 
     }
 
@@ -314,17 +415,29 @@ document.addEventListener("DOMContentLoaded", () => {
     ===================================================== */
 
     const mainVideo =
-        document.getElementById("mainVideo");
+        $("#mainVideo");
 
 
     if (mainVideo) {
+
+        mainVideo.addEventListener(
+            "loadedmetadata",
+            () => {
+
+                console.log(
+                    "Video loaded successfully."
+                );
+
+            }
+        );
+
 
         mainVideo.addEventListener(
             "error",
             () => {
 
                 console.error(
-                    "birthday.mp4 could not be loaded."
+                    "VIDEO ERROR: birthday.mp4 could not be loaded."
                 );
 
             }
@@ -338,37 +451,46 @@ document.addEventListener("DOMContentLoaded", () => {
     ===================================================== */
 
     const finishButton =
-        document.getElementById(
-            "finishButton"
-        );
+        $("#finishButton");
 
 
     if (finishButton) {
 
-        finishButton.addEventListener("click", () => {
+        finishButton.addEventListener(
+            "click",
+            (event) => {
 
-            showScene("finale");
+                event.preventDefault();
+                event.stopPropagation();
 
-            createFinaleParticles();
+                console.log(
+                    "Finish clicked"
+                );
 
-        });
+                showScene("finale");
+
+                createFinalParticles();
+
+            }
+        );
 
     }
 
 
     /* =====================================================
-       FINALE PARTICLES
+       FINAL PARTICLES
     ===================================================== */
 
-    function createFinaleParticles() {
+    function createFinalParticles() {
 
         const container =
-            document.getElementById(
-                "finalParticles"
-            );
+            $("#finalParticles");
 
 
         if (!container) return;
+
+
+        container.innerHTML = "";
 
 
         const symbols = [
@@ -379,7 +501,11 @@ document.addEventListener("DOMContentLoaded", () => {
         ];
 
 
-        for (let i = 0; i < 35; i++) {
+        for (
+            let i = 0;
+            i < 35;
+            i++
+        ) {
 
             const particle =
                 document.createElement("div");
@@ -432,7 +558,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             setTimeout(() => {
+
                 particle.remove();
+
             }, 11000);
 
         }
@@ -440,561 +568,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    const style =
-        document.createElement("style");
-
-
-    style.textContent = `
-
-        @keyframes rise {
-
-            from {
-                transform:
-                    translateY(0)
-                    rotate(0deg);
-
-                opacity: 0;
-            }
-
-            12% {
-                opacity: 1;
-            }
-
-            to {
-                transform:
-                    translateY(-120vh)
-                    rotate(35deg);
-
-                opacity: 0;
-            }
-
-        }
-
-    `;
-
-
-    document.head.appendChild(style);
-
-
     /* =====================================================
        RESTART
     ===================================================== */
 
     const restart =
-        document.getElementById(
-            "restart"
-        );
+        $("#restart");
 
 
     if (restart) {
 
-        restart.addEventListener("click", () => {
+        restart.addEventListener(
+            "click",
+            (event) => {
 
-            location.reload();
+                event.preventDefault();
+                event.stopPropagation();
 
-        });
+                location.reload();
 
-    }
-
-});
-```
-```javascript
-document.addEventListener("DOMContentLoaded", () => {
-
-
-    /* =====================================================
-       SCENE NAVIGATION
-    ===================================================== */
-
-    const scenes =
-        document.querySelectorAll(".scene");
-
-
-    function showScene(id) {
-
-        scenes.forEach(scene => {
-            scene.classList.remove("active");
-        });
-
-        const target =
-            document.getElementById(id);
-
-        if (!target) return;
-
-        requestAnimationFrame(() => {
-            target.classList.add("active");
-        });
-    }
-
-
-    /* =====================================================
-       STARS
-    ===================================================== */
-
-    const stars =
-        document.getElementById("stars");
-
-
-    if (stars) {
-
-        for (let i = 0; i < 70; i++) {
-
-            const star =
-                document.createElement("span");
-
-            star.className = "star";
-
-            star.style.left =
-                Math.random() * 100 + "vw";
-
-            star.style.top =
-                Math.random() * 100 + "vh";
-
-            star.style.animationDelay =
-                Math.random() * 4 + "s";
-
-            star.style.animationDuration =
-                2 + Math.random() * 4 + "s";
-
-            stars.appendChild(star);
-        }
-    }
-
-
-    /* =====================================================
-       MUSIC
-    ===================================================== */
-
-    const music =
-        document.getElementById("music");
-
-    const musicToggle =
-        document.getElementById("musicToggle");
-
-
-    function playMusic() {
-
-        if (!music) return;
-
-        music.volume = 0.22;
-
-        music.play()
-            .then(() => {
-
-                if (musicToggle) {
-                    musicToggle.textContent = "♫";
-                }
-
-            })
-            .catch(() => {});
-    }
-
-
-    if (musicToggle) {
-
-        musicToggle.addEventListener("click", () => {
-
-            if (!music) return;
-
-            if (music.paused) {
-
-                playMusic();
-
-            } else {
-
-                music.pause();
-
-                musicToggle.textContent = "♪";
             }
-        });
+        );
+
     }
 
 
     /* =====================================================
-       ENTER MUSEUM
+       KEYBOARD
     ===================================================== */
 
-    const enterMuseum =
-        document.getElementById("enterMuseum");
-
-
-    if (enterMuseum) {
-
-        enterMuseum.addEventListener("click", () => {
-
-            playMusic();
-
-            showScene("gallery");
-
-        });
-    }
-
-
-    /* =====================================================
-       GALLERY
-    ===================================================== */
-
-    const artworks =
-        document.querySelectorAll(".artwork");
-
-    const viewer =
-        document.getElementById("artViewer");
-
-    const viewerImage =
-        document.getElementById("viewerImage");
-
-    const viewerNumber =
-        document.getElementById("viewerNumber");
-
-    const closeViewer =
-        document.getElementById("closeViewer");
-
-    const openedCount =
-        document.getElementById("openedCount");
-
-    const galleryHint =
-        document.getElementById("galleryHint");
-
-    const continueGallery =
-        document.getElementById("continueGallery");
-
-
-    let openedImages =
-        new Set();
-
-
-    artworks.forEach((artwork, index) => {
-
-        artwork.addEventListener("click", () => {
-
-            const imageName =
-                artwork.dataset.image;
-
-            const img =
-                artwork.querySelector("img");
-
+    document.addEventListener(
+        "keydown",
+        event => {
 
             if (
-                !imageName ||
-                !img ||
-                !viewer ||
-                !viewerImage
-            ) {
-                return;
-            }
-
-
-            viewerImage.src =
-                img.currentSrc ||
-                "./" + imageName;
-
-
-            if (viewerNumber) {
-
-                viewerNumber.textContent =
-                    String(index + 1)
-                        .padStart(2, "0");
-
-            }
-
-
-            viewer.classList.add("show");
-
-
-            openedImages.add(index);
-
-            if (openedCount) {
-
-                openedCount.textContent =
-                    openedImages.size;
-
-            }
-
-
-            if (
-                openedImages.size === 6
+                event.key === "Escape" &&
+                viewer &&
+                viewer.classList.contains("show")
             ) {
 
-                if (galleryHint) {
-
-                    galleryHint.textContent =
-                        "The entire collection has been explored.";
-
-                }
-
-
-                if (continueGallery) {
-
-                    continueGallery.classList.remove(
-                        "hidden"
-                    );
-
-                }
-
-            } else {
-
-                if (galleryHint) {
-
-                    galleryHint.textContent =
-                        "Keep exploring the collection.";
-
-                }
-
-            }
-
-        });
-
-    });
-
-
-    if (closeViewer) {
-
-        closeViewer.addEventListener("click", () => {
-
-            viewer.classList.remove("show");
-
-        });
-
-    }
-
-
-    if (viewer) {
-
-        viewer.addEventListener("click", event => {
-
-            if (
-                event.target === viewer
-            ) {
-
-                viewer.classList.remove("show");
-
-            }
-
-        });
-
-    }
-
-
-    /* =====================================================
-       TO MESSAGE ROOM
-    ===================================================== */
-
-    if (continueGallery) {
-
-        continueGallery.addEventListener("click", () => {
-
-            showScene("messageRoom");
-
-        });
-
-    }
-
-
-    /* =====================================================
-       MESSAGE → CINEMA
-    ===================================================== */
-
-    const toCinema =
-        document.getElementById("toCinema");
-
-
-    if (toCinema) {
-
-        toCinema.addEventListener("click", () => {
-
-            showScene("cinema");
-
-        });
-
-    }
-
-
-    /* =====================================================
-       VIDEO
-    ===================================================== */
-
-    const mainVideo =
-        document.getElementById("mainVideo");
-
-
-    if (mainVideo) {
-
-        mainVideo.addEventListener(
-            "error",
-            () => {
-
-                console.error(
-                    "birthday.mp4 could not be loaded."
+                viewer.classList.remove(
+                    "show"
                 );
 
             }
-        );
-
-    }
-
-
-    /* =====================================================
-       FINISH
-    ===================================================== */
-
-    const finishButton =
-        document.getElementById(
-            "finishButton"
-        );
-
-
-    if (finishButton) {
-
-        finishButton.addEventListener("click", () => {
-
-            showScene("finale");
-
-            createFinaleParticles();
-
-        });
-
-    }
-
-
-    /* =====================================================
-       FINALE PARTICLES
-    ===================================================== */
-
-    function createFinaleParticles() {
-
-        const container =
-            document.getElementById(
-                "finalParticles"
-            );
-
-
-        if (!container) return;
-
-
-        const symbols = [
-            "✦",
-            "✧",
-            "⋆",
-            "♥"
-        ];
-
-
-        for (let i = 0; i < 35; i++) {
-
-            const particle =
-                document.createElement("div");
-
-
-            particle.textContent =
-                symbols[
-                    Math.floor(
-                        Math.random() *
-                        symbols.length
-                    )
-                ];
-
-
-            particle.style.position =
-                "fixed";
-
-
-            particle.style.left =
-                Math.random() * 100 + "vw";
-
-
-            particle.style.top =
-                105 + Math.random() * 10 + "vh";
-
-
-            particle.style.fontSize =
-                10 + Math.random() * 18 + "px";
-
-
-            particle.style.color =
-                i % 4 === 3
-                    ? "rgba(255,120,159,.7)"
-                    : "rgba(216,180,124,.65)";
-
-
-            particle.style.pointerEvents =
-                "none";
-
-
-            particle.style.animation =
-                `rise ${
-                    5 + Math.random() * 5
-                }s linear forwards`;
-
-
-            container.appendChild(
-                particle
-            );
-
-
-            setTimeout(() => {
-                particle.remove();
-            }, 11000);
 
         }
-
-    }
-
-
-    const style =
-        document.createElement("style");
+    );
 
 
-    style.textContent = `
-
-        @keyframes rise {
-
-            from {
-                transform:
-                    translateY(0)
-                    rotate(0deg);
-
-                opacity: 0;
-            }
-
-            12% {
-                opacity: 1;
-            }
-
-            to {
-                transform:
-                    translateY(-120vh)
-                    rotate(35deg);
-
-                opacity: 0;
-            }
-
-        }
-
-    `;
-
-
-    document.head.appendChild(style);
-
-
-    /* =====================================================
-       RESTART
-    ===================================================== */
-
-    const restart =
-        document.getElementById(
-            "restart"
-        );
-
-
-    if (restart) {
-
-        restart.addEventListener("click", () => {
-
-            location.reload();
-
-        });
-
-    }
+    console.log(
+        "RADODA WEBSITE READY ✅"
+    );
 
 });
-```
